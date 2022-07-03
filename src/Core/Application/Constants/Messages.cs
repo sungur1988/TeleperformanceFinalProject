@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Application.Constants
+﻿namespace Application.Constants
 {
     public static class Messages
     {
         public static string StockUnitCreated = "Stock unit created";
+        public static string StockUnitNotFound = "Stock unit not found";
+        public static string InternalServerError = "An unexpected error has occurred, please try again later";
+        public static string StockUnitUpdated = "Stock unit updated";
     }
 }
