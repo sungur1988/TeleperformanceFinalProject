@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace WebApi.Controllers
 {
@@ -19,6 +20,23 @@ namespace WebApi.Controllers
         public async Task<IActionResult> CreateStockUnit(CreateStockUnitCommand request)
         {
             var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateStockUnit(UpdateStockUnitCommand request)
+        {
+            var result = await _mediator.Send(request);
+            switch (result.StatusCode)
+            {
+                case 404:
+                    return NotFound(result);
+                    break;
+                case 500:
+                    return StatusCode((int)StatusCodes.Status500InternalServerError,result);
+                    break;
+                default:
+                    break;
+            }
             return Ok(result);
         }
     }
