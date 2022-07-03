@@ -15,6 +15,7 @@ namespace Application.Mappings
         public MapProfile()
         {
             CreateMap<StockUnit, CreateStockUnitCommand>().ReverseMap();
+            CreateMap<StockUnit, UpdateStockUnitCommand>().ReverseMap();
             CreateMap<StockUnit, StockUnitDto>().ReverseMap();
         }
     }
