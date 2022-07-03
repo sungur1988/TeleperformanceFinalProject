@@ -1,0 +1,12 @@
+﻿using Application.Wrapper;
+using MediatR;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Application.Features.StockUnits.Requests.Commands
+{
+    public record DeleteStockUnitCommand(string Id):IRequest<BaseResponse>;
+}
