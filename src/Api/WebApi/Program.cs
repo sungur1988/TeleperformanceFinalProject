@@ -1,4 +1,5 @@
 using Persistence;
+using Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +8,7 @@ var configuration = builder.Configuration;
 
 
 builder.Services.AddPersistence(configuration);
+builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
