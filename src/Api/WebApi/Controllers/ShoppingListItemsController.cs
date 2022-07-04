@@ -1,4 +1,4 @@
-﻿using Application.Features.ShoppingListItems.Requests;
+﻿using Application.Features.ShoppingListItems.Requests.Commands;
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -30,6 +30,16 @@ namespace WebApi.Controllers
                     break;
                 default:
                     break;
+            }
+            return Ok(result);
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateShoppingListItem(UpdateShoppingListItemCommand request)
+        {
+            var result = await _mediator.Send(request);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
             }
             return Ok(result);
         }
