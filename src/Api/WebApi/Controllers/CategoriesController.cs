@@ -1,4 +1,5 @@
 ﻿using Application.Features.Categories.Requests.Commands;
+using Application.Features.Categories.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -40,6 +41,20 @@ namespace WebApi.Controllers
                 return NotFound(result);
             }
             return Ok(result);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCategoryById(string id)
+        {
+            var request = new GetCategoryByIdQuery(id);
+            var result = await _mediator.Send(request);
+            if(!result.IsSuccess)
+                return NotFound(result);
+            return Ok(result);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategory(int pageNumber,int pageSize)
+        {
+            return Ok(await _mediator.Send(new GetAllCategoryQuery(pageNumber, pageSize)));
         }
     }
 }
