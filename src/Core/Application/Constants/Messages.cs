@@ -9,6 +9,8 @@
         public static string CategoryUpdated = "Category updated";
         public static string CategoryNotFound = "Category not found";
         public static string CategoryDeleted = "Category deleted";
+
         public static string ShoppingListCreated = "Shopping list item created";
+        public static string ShoppingListNotFound= "Shopping list not found";
     }
 }
