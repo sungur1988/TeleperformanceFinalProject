@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+using Application.Features.ShoppingListItems.Requests;
 using Application.Features.StockUnits.Requests.Commands;
 using AutoMapper;
 using Domain;
@@ -17,6 +18,11 @@ namespace Application.Mappings
             CreateMap<StockUnit, CreateStockUnitCommand>().ReverseMap();
             CreateMap<StockUnit, UpdateStockUnitCommand>().ReverseMap();
             CreateMap<StockUnit, StockUnitDto>().ReverseMap();
+
+            CreateMap<ShoppingListItem, CreateShoppingListItemCommand>().ReverseMap();
+            CreateMap<ShoppingListItem,ShoppingListItemDto>().ReverseMap();
+
+            CreateMap<Category, CategoryDto>();
         }
     }
 }
