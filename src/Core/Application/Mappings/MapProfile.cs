@@ -26,6 +26,7 @@ namespace Application.Mappings
             CreateMap<ShoppingListItem, ShoppingListItemUpdateDto>().ReverseMap();
 
             CreateMap<Category, CreateCategoryCommand>().ReverseMap();
+            CreateMap<Category, UpdateCategoryCommand>().ReverseMap();
             CreateMap<Category, CategoryDto>().ReverseMap();
         }
     }
