@@ -42,5 +42,16 @@ namespace WebApi.Controllers
                 return NotFound(result);
             return Ok(result);
         }
+        [HttpGet]
+        public async Task<IActionResult> GetAllCategory(int pageNumber, int pageSize)
+        {
+            var request = new GetAllShoppingListQuery(pageNumber, pageSize);
+            var result = await _mediator.Send(request);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
+        }
     }
 }
