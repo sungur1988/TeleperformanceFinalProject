@@ -54,7 +54,13 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllCategory(int pageNumber,int pageSize)
         {
-            return Ok(await _mediator.Send(new GetAllCategoryQuery(pageNumber, pageSize)));
+            var request = new GetAllCategoryQuery(pageNumber, pageSize);
+            var result = await _mediator.Send(request);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
         }
     }
 }

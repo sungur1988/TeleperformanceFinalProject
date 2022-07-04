@@ -24,7 +24,7 @@ namespace Application.Features.Categories.Handlers.Queries
             var result = _categoryReadRepository.GetAll().Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).AsEnumerable();
             if (result.Count() == 0)
             {
-                return Task.FromResult(new ServiceResponseIEnumerable<CategoryDto>(default,false,404,Messages.CategoryNotFound));
+                return Task.FromResult(new ServiceResponse<IEnumerable<CategoryDto>>(default,false,404,Messages.CategoryNotFound));
             }
             return Task.FromResult(new ServiceResponse<IEnumerable<CategoryDto>>(_mapper.Map<IEnumerable<CategoryDto>>(result), true, 200));
         }
