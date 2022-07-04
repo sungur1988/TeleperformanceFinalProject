@@ -2,13 +2,13 @@
 using Application.Contracts.Repositories.ReadRepositories;
 using Application.Contracts.Repositories.WriteRepositories;
 using Application.Dtos;
-using Application.Features.ShoppingListItems.Requests;
+using Application.Features.ShoppingListItems.Requests.Commands;
 using Application.Wrapper;
 using AutoMapper;
 using Domain;
 using MediatR;
 
-namespace Application.Features.ShoppingListItems.Handlers
+namespace Application.Features.ShoppingListItems.Handlers.Commands
 {
     public class CreateShoppingListItemHandler : IRequestHandler<CreateShoppingListItemCommand, ServiceResponse<ShoppingListItemDto>>
     {
@@ -26,13 +26,13 @@ namespace Application.Features.ShoppingListItems.Handlers
         public async Task<ServiceResponse<ShoppingListItemDto>> Handle(CreateShoppingListItemCommand request, CancellationToken cancellationToken)
         {
             var stockUnitToAdd = await _stockUnitReadRepository.GetById(request.StockUnitId);
-            if (stockUnitToAdd==null)
+            if (stockUnitToAdd == null)
             {
                 return new ServiceResponse<ShoppingListItemDto>(default, false, 404, Messages.CategoryNotFound);
             }
             var entityToAdd = _mapper.Map<ShoppingListItem>(request);
             entityToAdd.StockUnit = stockUnitToAdd;
-            var result= await _shoppingListItemWriteRepository.AddAsync(entityToAdd);
+            var result = await _shoppingListItemWriteRepository.AddAsync(entityToAdd);
             return new ServiceResponse<ShoppingListItemDto>(_mapper.Map<ShoppingListItemDto>(result), true, 204, Messages.ShoppingListItemCreated);
         }
     }
