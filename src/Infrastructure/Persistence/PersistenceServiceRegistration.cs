@@ -21,14 +21,8 @@ namespace Persistence
             services.AddScoped<IShoppingListWriteRepository, ShoppingListWriteRepository>();
             services.AddScoped<IShoppingListReadRepository, ShoppingListReadRepository>();
 
-            services.AddScoped<IShoppingListItemWriteRepository, ShoppingListItemWriteRepository>();
-            services.AddScoped<IShoppingListItemReadRepository, ShoppingListItemReadRepository>();
-
             services.AddScoped<ICategoryWriteRepository, CategoryWriteRepository>();
             services.AddScoped<ICategoryReadRepository, CategoryReadRepository>();
-
-            services.AddScoped<IStockUnitWriteRepository, StockUnitWriteRepository>();
-            services.AddScoped<IStockUnitReadRepository, StockUnitReadRepository>();
 
             return services;
 

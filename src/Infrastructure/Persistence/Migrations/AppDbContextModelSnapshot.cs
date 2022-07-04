@@ -86,9 +86,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.ShoppingListItem", b =>
                 {
                     b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)")
-                        .HasDefaultValueSql("NEWID()");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
@@ -98,55 +96,20 @@ namespace Persistence.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("StockUnitId")
+                    b.Property<string>("ShoppingListId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.HasIndex("StockUnitId");
-
-                    b.ToTable("ShoppingListItems");
-                });
-
-            modelBuilder.Entity("Domain.StockUnit", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)")
-                        .HasDefaultValueSql("NEWID()");
-
-                    b.Property<string>("Name")
+                    b.Property<string>("StockUnit")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Name")
-                        .IsUnique();
+                    b.HasIndex("ShoppingListId");
 
-                    b.ToTable("StockUnits");
-                });
-
-            modelBuilder.Entity("ShoppingListShoppingListItem", b =>
-                {
-                    b.Property<string>("ShoppingListItemsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ShoppingListsId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("ShoppingListItemsId", "ShoppingListsId");
-
-                    b.HasIndex("ShoppingListsId");
-
-                    b.ToTable("ShoppingListShoppingListItem");
+                    b.ToTable("ShoppingListItem");
                 });
 
             modelBuilder.Entity("Domain.ShoppingList", b =>
@@ -162,26 +125,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.ShoppingListItem", b =>
                 {
-                    b.HasOne("Domain.StockUnit", "StockUnit")
-                        .WithMany("ShoppingListItems")
-                        .HasForeignKey("StockUnitId");
-
-                    b.Navigation("StockUnit");
-                });
-
-            modelBuilder.Entity("ShoppingListShoppingListItem", b =>
-                {
-                    b.HasOne("Domain.ShoppingListItem", null)
-                        .WithMany()
-                        .HasForeignKey("ShoppingListItemsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.ShoppingList", null)
-                        .WithMany()
-                        .HasForeignKey("ShoppingListsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("ShoppingListItems")
+                        .HasForeignKey("ShoppingListId");
                 });
 
             modelBuilder.Entity("Domain.Category", b =>
@@ -189,7 +135,7 @@ namespace Persistence.Migrations
                     b.Navigation("ShoppingLists");
                 });
 
-            modelBuilder.Entity("Domain.StockUnit", b =>
+            modelBuilder.Entity("Domain.ShoppingList", b =>
                 {
                     b.Navigation("ShoppingListItems");
                 });

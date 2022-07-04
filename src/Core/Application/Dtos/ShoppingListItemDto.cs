@@ -9,6 +9,8 @@ namespace Application.Dtos
     public class ShoppingListItemDto
     {
         public string Name { get; set; }
-        public StockUnitDto StockUnit { get; set; }
+        public string StockUnit { get; set; }
+        public int Amount { get; set; }
+        public bool IsPurchased { get; set; }
     }
 }

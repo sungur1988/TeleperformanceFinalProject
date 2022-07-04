@@ -11,15 +11,11 @@ namespace Persistence
 
         }
         public DbSet<ShoppingList> ShoppingLists { get; set; }
-        public DbSet<ShoppingListItem> ShoppingListItems { get; set; }
-        public DbSet<StockUnit> StockUnits { get; set; }
         public DbSet<Category> Categories { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new ShoppingListItemConfigurations());
             modelBuilder.ApplyConfiguration(new ShoppingListConfigurations());
             modelBuilder.ApplyConfiguration(new CategoryConfigurations());
-            modelBuilder.ApplyConfiguration(new StockUnitConfigurations());
         }
     }
 }
