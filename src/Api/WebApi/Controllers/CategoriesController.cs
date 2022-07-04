@@ -21,5 +21,15 @@ namespace WebApi.Controllers
             var result = await _mediator.Send(request);
             return Ok(result);
         }
+        [HttpPut]
+        public async Task<IActionResult> UpdateCategory(UpdateCategoryCommand request)
+        {
+            var result=await _mediator.Send(request);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
+        }
     }
 }
