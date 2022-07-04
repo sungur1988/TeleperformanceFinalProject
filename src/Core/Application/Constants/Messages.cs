@@ -11,5 +11,6 @@
         public static string ShoppingListItemCreated = "Shopping list item created";
         public static string ShoppingListItemNotFound = "Shopping list item not found";
         public static string ShoppingListItemUpdated = "Shopping list item updated";
+        public static string ShoppingListItemDeleted = "Shopping list item deleted";
     }
 }
