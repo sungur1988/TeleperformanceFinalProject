@@ -14,5 +14,6 @@
         public static string CategoryCreated = "Category created";
         public static string CategoryUpdated = "Category updated";
         public static string CategoryNotFound = "Category not found";
+        public static string CategoryDeleted = "Category deleted";
     }
 }
