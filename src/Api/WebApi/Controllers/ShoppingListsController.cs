@@ -1,4 +1,5 @@
 ﻿using Application.Features.ShoppingLists.Requests.Commands;
+using Application.Features.ShoppingLists.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,15 @@ namespace WebApi.Controllers
                 default:
                     break;
             }
+            return Ok(result);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetShoppingListById(string id)
+        {
+            var request = new GetShoppingListByIdQuery(id);
+            var result = await _mediator.Send(request);
+            if (!result.IsSuccess)
+                return NotFound(result);
             return Ok(result);
         }
     }
