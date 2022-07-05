@@ -5,6 +5,7 @@ using Application.Features.ShoppingLists.Requests.Queries;
 using Application.Wrapper;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.ShoppingLists.Handlers.Queries
 {
@@ -21,10 +22,14 @@ namespace Application.Features.ShoppingLists.Handlers.Queries
 
         public Task<ServiceResponse<IEnumerable<ShoppingListDto>>> Handle(GetAllShoppingListQuery request, CancellationToken cancellationToken)
         {
-             var result = _shoppingListReadRepository
-                    .GetAll()
-                    .Skip((request.PageNumber - 1) * request.PageSize)
-                    .Take(request.PageSize).AsEnumerable();
+            var query = _shoppingListReadRepository.GetAll();
+            if (!string.IsNullOrWhiteSpace(request.Keyword))
+            {
+               query= query.Where(x => x.Name.Contains(request.Keyword) || x.Category.Name.Contains(request.Keyword));
+            }
+            var result = query
+                .Include(x=>x.Category)
+                .Include(x=>x.ShoppingListItems).ToList();
             if (result.Count() == 0)
             {
                 return Task.FromResult(new ServiceResponse<IEnumerable<ShoppingListDto>>(default, false, 404, Messages.ShoppingListNotFound));
