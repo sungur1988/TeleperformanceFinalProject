@@ -1,6 +1,7 @@
 ﻿using Application.Dtos;
 using Application.Features.Categories.Requests.Commands;
 using Application.Features.ShoppingLists.Requests.Commands;
+using Application.Models;
 using AutoMapper;
 using Domain;
 
@@ -19,6 +20,9 @@ namespace Application.Mappings
 
             CreateMap<ShoppingList, CreateShoppingListCommand>().ReverseMap();
             CreateMap<ShoppingList, ShoppingListDto>().ReverseMap();
+
+            CreateMap<RegisterRequestDto, AppUser>().ReverseMap();
+            CreateMap<RegisterResponseDto, AppUser>().ReverseMap();
         }
     }
 }
