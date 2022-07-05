@@ -64,6 +64,14 @@ namespace WebApi.Controllers
             }
             return Ok(result);
         }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteShoppingList(DeleteShoppingListCommand request)
+        {
+            var result = await _mediator.Send(request);
+            if (!result.IsSuccess)
+                return NotFound(result);
+            return Ok(result);
+        }
     }
 
 }
