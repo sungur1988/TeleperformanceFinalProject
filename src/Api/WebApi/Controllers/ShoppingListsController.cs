@@ -44,9 +44,19 @@ namespace WebApi.Controllers
             return Ok(result);
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllCategory(int pageNumber, int pageSize,string? keyword)
+        public async Task<IActionResult> GetAllShoppingLists(int pageNumber, int pageSize,string? keyword)
         {
             var request = new GetAllShoppingListQuery(pageNumber, pageSize,keyword);
+            var result = await _mediator.Send(request);
+            if (!result.IsSuccess)
+            {
+                return NotFound(result);
+            }
+            return Ok(result);
+        }
+        [HttpPut]
+        public async Task<IActionResult> UpdateShoppingList(UpdateShoppingListCommand request)
+        {
             var result = await _mediator.Send(request);
             if (!result.IsSuccess)
             {
