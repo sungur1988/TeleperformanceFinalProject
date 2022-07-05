@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
@@ -43,9 +44,9 @@ namespace WebApi.Controllers
             return Ok(result);
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllCategory(int pageNumber, int pageSize)
+        public async Task<IActionResult> GetAllCategory(int pageNumber, int pageSize,string? keyword)
         {
-            var request = new GetAllShoppingListQuery(pageNumber, pageSize);
+            var request = new GetAllShoppingListQuery(pageNumber, pageSize,keyword);
             var result = await _mediator.Send(request);
             if (!result.IsSuccess)
             {
@@ -54,4 +55,5 @@ namespace WebApi.Controllers
             return Ok(result);
         }
     }
+
 }
