@@ -5,6 +5,7 @@ using Application.Features.ShoppingLists.Requests.Queries;
 using Application.Wrapper;
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.ShoppingLists.Handlers.Queries
 {
@@ -19,12 +20,12 @@ namespace Application.Features.ShoppingLists.Handlers.Queries
             _mapper = mapper;
         }
 
-        public async Task<ServiceResponse<ShoppingListDto>> Handle(GetShoppingListByIdQuery request, CancellationToken cancellationToken)
+        public  Task<ServiceResponse<ShoppingListDto>> Handle(GetShoppingListByIdQuery request, CancellationToken cancellationToken)
         {
-            var result = await _shoppingListReadRepository.GetById(request.Id);
+            var result =  _shoppingListReadRepository.GetAll(x => x.Id == request.Id).Include(x => x.Category).Include(x => x.ShoppingListItems).ToList()[0];
             if (result == null)
-                return new ServiceResponse<ShoppingListDto>(default, false, 404, Messages.ShoppingListNotFound);
-            return new ServiceResponse<ShoppingListDto>(_mapper.Map<ShoppingListDto>(result), true, 200);
+                return Task.FromResult(new ServiceResponse<ShoppingListDto>(default, false, 404, Messages.ShoppingListNotFound));
+            return Task.FromResult(new ServiceResponse<ShoppingListDto>(_mapper.Map<ShoppingListDto>(result), true, 200));
         }
     }
 }
