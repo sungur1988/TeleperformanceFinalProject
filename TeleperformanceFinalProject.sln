@@ -5,8 +5,6 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9BC071F9-D9A2-4A36-AF4E-2133227881A3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2BC2349D-4BE3-4FA3-8274-44EAA2D7B3FF}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{86604186-AD2F-4C29-910E-ED3A381CB342}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{A6B37291-8095-49BA-ABC4-5688EDF97332}"
@@ -23,7 +21,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "src\Infrastr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity", "src\Infrastructure\Identity\Identity.csproj", "{5E2ACA96-20B0-4375-95E0-8F59FE91C16D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cache", "src\Infrastructure\Cache\Cache.csproj", "{D2AC4D6A-F76C-4E47-BA0B-85F5F2C83AF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cache", "src\Infrastructure\Cache\Cache.csproj", "{D2AC4D6A-F76C-4E47-BA0B-85F5F2C83AF4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E67E90FE-C0A8-4E48-819E-3ED634E08FC9}"
+	ProjectSection(SolutionItems) = preProject
+		ProjeninÇalıştırılması.txt = ProjeninÇalıştırılması.txt
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,12 @@
+Projeyi çalýþtýrmak için yapýlmasý gerekenler:
+Ýndirdikten sonra tüm projeler tek tek build edildikten sonra solution rebuild edilmelidir.
+Rebuild edildikten sonra bir hatayla karþýlaþýlmadýysa WebApi içinde bulunan appsettings.json dosyasýný içindeki connection string yerlerine kendi connection stringinizi giriniz.
+Solution explorerdan WebApi projesine sað týklayýp  set as startup project butonuna týklayýn.
+Toolslardan Packet manager console açýldýktan sonra default project Identity seçildikten sonra þu komutlar sýrasýyla yazýn.
+add-migration Init -context AppIdentityDbContext
+update-database Init -context AppIdentityDbContext
+ardýndan defaul project Infrastructure olarak seçildikten sonra
+add-migration Init -context AppDbContext
+update-database Init -context AppDbContext 
+komutlarýný yazýnýz.
+Authorization olduðu ve swagger hakkýnda tam olarak bilgim olmadýðý için postman üzerinden istek göderilmesi gerekiyor
