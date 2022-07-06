@@ -1,4 +1,8 @@
-﻿using MediatR;
+﻿using Application.Behavior;
+using Application.Middlewares;
+using Application.Validations;
+using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -10,6 +14,10 @@ namespace Application
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssemblyContaining<ShoppingListCompletedCommandValidator>();
+
+            services.AddTransient<ExceptionMiddleware>();
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             return services;
         }

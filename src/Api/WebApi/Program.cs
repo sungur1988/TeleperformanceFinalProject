@@ -1,6 +1,7 @@
 
 
 using Application;
+using Application.Middlewares;
 using Cache;
 using Identity;
 using Persistence;
@@ -33,6 +34,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.ConfigureCustomExceptionMiddleware();
 app.UseHttpsRedirection();
 
 app.UseRouting();
