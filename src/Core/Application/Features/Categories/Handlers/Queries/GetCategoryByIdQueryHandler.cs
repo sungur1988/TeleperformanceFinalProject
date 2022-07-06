@@ -21,12 +21,21 @@ namespace Application.Features.Categories.Handlers.Queries
 
         public async Task<ServiceResponse<CategoryDto>> Handle(GetCategoryByIdQuery request, CancellationToken cancellationToken)
         {
-            var result = await _categoryReadRepository.GetById(request.Id);
-            if (result==null)
+            try
             {
-                return new ServiceResponse<CategoryDto>(default, false, 404, Messages.CategoryNotFound);
+                var result = await _categoryReadRepository.GetById(request.Id);
+                if (result == null)
+                {
+                    return new ServiceResponse<CategoryDto>(default, false, 404, Messages.CategoryNotFound);
+                }
+                return new ServiceResponse<CategoryDto>(_mapper.Map<CategoryDto>(result), true, 200);
             }
-            return new ServiceResponse<CategoryDto>(_mapper.Map<CategoryDto>(result), true, 200);
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+            
         }
     }
 }

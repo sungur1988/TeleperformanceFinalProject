@@ -20,11 +20,20 @@ namespace Application.Features.ShoppingLists.Handlers.Commands
 
         public async Task<BaseResponse> Handle(DeleteShoppingListCommand request, CancellationToken cancellationToken)
         {
-            var entityToDelete = await _shoppingListReadRepository.GetById(request.Id);
-            if (entityToDelete == null)
-                return new BaseResponse(false, 404, Messages.ShoppingListNotFound);
-            _shoppingListWriteRepository.Remove(entityToDelete);
-            return new BaseResponse(true, 200, Messages.ShoppingListDeleted);
+            try
+            {
+                var entityToDelete = await _shoppingListReadRepository.GetById(request.Id);
+                if (entityToDelete == null)
+                    return new BaseResponse(false, 404, Messages.ShoppingListNotFound);
+                _shoppingListWriteRepository.Remove(entityToDelete);
+                return new BaseResponse(true, 200, Messages.ShoppingListDeleted);
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+
         }
     }
 }

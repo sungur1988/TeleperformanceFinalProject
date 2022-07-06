@@ -22,10 +22,18 @@ namespace Application.Features.ShoppingLists.Handlers.Queries
 
         public  Task<ServiceResponse<ShoppingListDto>> Handle(GetShoppingListByIdQuery request, CancellationToken cancellationToken)
         {
-            var result =  _shoppingListReadRepository.GetAll(x => x.Id == request.Id).Include(x => x.Category).Include(x => x.ShoppingListItems).ToList()[0];
-            if (result == null)
-                return Task.FromResult(new ServiceResponse<ShoppingListDto>(default, false, 404, Messages.ShoppingListNotFound));
-            return Task.FromResult(new ServiceResponse<ShoppingListDto>(_mapper.Map<ShoppingListDto>(result), true, 200));
+            try
+            {
+                var result = _shoppingListReadRepository.GetAll(x => x.Id == request.Id).Include(x => x.Category).Include(x => x.ShoppingListItems).ToList()[0];
+                if (result == null)
+                    return Task.FromResult(new ServiceResponse<ShoppingListDto>(default, false, 404, Messages.ShoppingListNotFound));
+                return Task.FromResult(new ServiceResponse<ShoppingListDto>(_mapper.Map<ShoppingListDto>(result), true, 200));
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
         }
     }
 }

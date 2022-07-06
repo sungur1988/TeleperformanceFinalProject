@@ -20,15 +20,24 @@ namespace Application.Features.ShoppingLists.Handlers.Commands
 
         public async Task<BaseResponse> Handle(ShoppingListCompletedCommand request, CancellationToken cancellationToken)
         {
-            var entityToUpdate = await _shoppingListReadRepository.GetById(request.Id);
-            if (entityToUpdate == null)
-                return new BaseResponse(false, 404, Messages.ShoppingListNotFound);
-            entityToUpdate.IsCompleted = request.IsCompleted;
-            entityToUpdate.CompletedDate = DateTime.UtcNow;
-            var updatedEntity=_shoppingListWriteRepository.Update(entityToUpdate);
-            if (updatedEntity == null)
-                return new BaseResponse(false, 500, Messages.InternalServerError);
-            return new BaseResponse(true, 200, Messages.ShoppingListUpdated);
+            try
+            {
+                var entityToUpdate = await _shoppingListReadRepository.GetById(request.Id);
+                if (entityToUpdate == null)
+                    return new BaseResponse(false, 404, Messages.ShoppingListNotFound);
+                entityToUpdate.IsCompleted = request.IsCompleted;
+                entityToUpdate.CompletedDate = DateTime.UtcNow;
+                var updatedEntity = _shoppingListWriteRepository.Update(entityToUpdate);
+                if (updatedEntity == null)
+                    return new BaseResponse(false, 500, Messages.InternalServerError);
+                return new BaseResponse(true, 200, Messages.ShoppingListUpdated);
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+            
         }
     }
 }

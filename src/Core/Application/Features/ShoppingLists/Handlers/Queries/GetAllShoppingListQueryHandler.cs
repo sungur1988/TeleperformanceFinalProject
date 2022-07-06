@@ -22,19 +22,28 @@ namespace Application.Features.ShoppingLists.Handlers.Queries
 
         public Task<ServiceResponse<IEnumerable<ShoppingListDto>>> Handle(GetAllShoppingListQuery request, CancellationToken cancellationToken)
         {
-            var query = _shoppingListReadRepository.GetAll();
-            if (!string.IsNullOrWhiteSpace(request.Keyword))
+            try
             {
-               query= query.Where(x => x.Name.Contains(request.Keyword) || x.Category.Name.Contains(request.Keyword));
+                var query = _shoppingListReadRepository.GetAll();
+                if (!string.IsNullOrWhiteSpace(request.Keyword))
+                {
+                    query = query.Where(x => x.Name.Contains(request.Keyword) || x.Category.Name.Contains(request.Keyword));
+                }
+                var result = query
+                    .Include(x => x.Category)
+                    .Include(x => x.ShoppingListItems).ToList();
+                if (result.Count() == 0)
+                {
+                    return Task.FromResult(new ServiceResponse<IEnumerable<ShoppingListDto>>(default, false, 404, Messages.ShoppingListNotFound));
+                }
+                return Task.FromResult(new ServiceResponse<IEnumerable<ShoppingListDto>>(_mapper.Map<IEnumerable<ShoppingListDto>>(result), true, 200));
             }
-            var result = query
-                .Include(x=>x.Category)
-                .Include(x=>x.ShoppingListItems).ToList();
-            if (result.Count() == 0)
+            catch (Exception e)
             {
-                return Task.FromResult(new ServiceResponse<IEnumerable<ShoppingListDto>>(default, false, 404, Messages.ShoppingListNotFound));
+
+                throw new Exception(e.Message);
             }
-            return Task.FromResult(new ServiceResponse<IEnumerable<ShoppingListDto>>(_mapper.Map<IEnumerable<ShoppingListDto>>(result), true, 200));
+            
         }
     }
 }

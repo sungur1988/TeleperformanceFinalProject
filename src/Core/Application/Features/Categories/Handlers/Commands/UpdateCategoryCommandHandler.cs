@@ -24,14 +24,23 @@ namespace Application.Features.Categories.Handlers.Commands
 
         public async Task<ServiceResponse<CategoryDto>> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var entityToUpdate = await _categoryReadRepository.GetById(request.Id);
-            if (entityToUpdate==null)
+            try
             {
-                return new ServiceResponse<CategoryDto>(default, false, 404, Messages.CategoryNotFound);
+                var entityToUpdate = await _categoryReadRepository.GetById(request.Id);
+                if (entityToUpdate == null)
+                {
+                    return new ServiceResponse<CategoryDto>(default, false, 404, Messages.CategoryNotFound);
+                }
+                entityToUpdate = _mapper.Map(request, entityToUpdate);
+                _categoryWriteRepository.Update(entityToUpdate);
+                return new ServiceResponse<CategoryDto>(_mapper.Map<CategoryDto>(entityToUpdate), true, 200, Messages.CategoryUpdated);
             }
-            entityToUpdate = _mapper.Map(request, entityToUpdate);
-            _categoryWriteRepository.Update(entityToUpdate);
-            return new ServiceResponse<CategoryDto>(_mapper.Map<CategoryDto>(entityToUpdate), true, 200, Messages.CategoryUpdated);
+            catch (Exception e)
+            {
+                
+                throw new Exception(e.Message);
+            }
+
         }
     }
 }

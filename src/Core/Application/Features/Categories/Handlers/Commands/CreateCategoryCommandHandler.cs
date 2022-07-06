@@ -27,9 +27,18 @@ namespace Application.Features.Categories.Handlers.Commands
 
         public async Task<ServiceResponse<CategoryDto>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var entityToAdd = _mapper.Map<Category>(request);
-            var result = await _categoryWriteRepository.AddAsync(entityToAdd);
-            return new ServiceResponse<CategoryDto>(_mapper.Map<CategoryDto>(result), true, 204, Messages.CategoryCreated);
+            try
+            {
+                var entityToAdd = _mapper.Map<Category>(request);
+                var result = await _categoryWriteRepository.AddAsync(entityToAdd);
+                return new ServiceResponse<CategoryDto>(_mapper.Map<CategoryDto>(result), true, 204, Messages.CategoryCreated);
+            }
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+            
         }
     }
 }

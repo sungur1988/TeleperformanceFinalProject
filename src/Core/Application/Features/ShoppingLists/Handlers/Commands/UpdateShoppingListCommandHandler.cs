@@ -26,19 +26,28 @@ namespace Application.Features.ShoppingLists.Handlers.Commands
 
         public async Task<ServiceResponse<ShoppingListDto>> Handle(UpdateShoppingListCommand request, CancellationToken cancellationToken)
         {
-            var entityToUpdate = await _shoppingListReadRepository.GetById(request.Id);
-            if (entityToUpdate==null)
+            try
             {
-                return new ServiceResponse<ShoppingListDto>(default, false, 404, Messages.ShoppingListNotFound);
+                var entityToUpdate = await _shoppingListReadRepository.GetById(request.Id);
+                if (entityToUpdate == null)
+                {
+                    return new ServiceResponse<ShoppingListDto>(default, false, 404, Messages.ShoppingListNotFound);
+                }
+                var categoryToAdd = await _categoryReadRepository.GetById(request.CategoryId);
+                if (categoryToAdd == null)
+                {
+                    return new ServiceResponse<ShoppingListDto>(default, false, 404, Messages.CategoryNotFound);
+                }
+                entityToUpdate.Category = categoryToAdd;
+                var result = _shoppingListWriteRepository.Update(entityToUpdate);
+                return new ServiceResponse<ShoppingListDto>(_mapper.Map<ShoppingListDto>(result), true, 200, Messages.ShoppingListUpdated);
             }
-            var categoryToAdd = await _categoryReadRepository.GetById(request.CategoryId);
-            if (categoryToAdd == null)
+            catch (Exception e)
             {
-                return new ServiceResponse<ShoppingListDto>(default, false, 404, Messages.CategoryNotFound);
+
+                throw new Exception(e.Message);
             }
-            entityToUpdate.Category = categoryToAdd;
-            var result=_shoppingListWriteRepository.Update(entityToUpdate);
-            return new ServiceResponse<ShoppingListDto>(_mapper.Map<ShoppingListDto>(result), true, 200,Messages.ShoppingListUpdated);
+            
         }
     }
 }

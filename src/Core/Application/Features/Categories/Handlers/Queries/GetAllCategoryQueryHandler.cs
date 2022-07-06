@@ -21,12 +21,21 @@ namespace Application.Features.Categories.Handlers.Queries
 
         public Task<ServiceResponse<IEnumerable<CategoryDto>>> Handle(GetAllCategoryQuery request, CancellationToken cancellationToken)
         {
-            var result = _categoryReadRepository.GetAll().Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).AsEnumerable();
-            if (result.Count() == 0)
+            try
             {
-                return Task.FromResult(new ServiceResponse<IEnumerable<CategoryDto>>(default,false,404,Messages.CategoryNotFound));
+                var result = _categoryReadRepository.GetAll().Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).AsEnumerable();
+                if (result.Count() == 0)
+                {
+                    return Task.FromResult(new ServiceResponse<IEnumerable<CategoryDto>>(default, false, 404, Messages.CategoryNotFound));
+                }
+                return Task.FromResult(new ServiceResponse<IEnumerable<CategoryDto>>(_mapper.Map<IEnumerable<CategoryDto>>(result), true, 200));
             }
-            return Task.FromResult(new ServiceResponse<IEnumerable<CategoryDto>>(_mapper.Map<IEnumerable<CategoryDto>>(result), true, 200));
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+            
         }
     }
 }

@@ -25,16 +25,25 @@ namespace Application.Features.ShoppingLists.Handlers.Commands
 
         public async Task<ServiceResponse<ShoppingListDto>> Handle(CreateShoppingListCommand request, CancellationToken cancellationToken)
         {
-            var entityToAdd = _mapper.Map<ShoppingList>(request);
-            var categoryToAdd = await _categoryReadRepository.GetById(request.CategoryId);
-            if (categoryToAdd==null)
+            try
             {
-                return new ServiceResponse<ShoppingListDto>(default, false, 404, Messages.CategoryNotFound);
+                var entityToAdd = _mapper.Map<ShoppingList>(request);
+                var categoryToAdd = await _categoryReadRepository.GetById(request.CategoryId);
+                if (categoryToAdd == null)
+                {
+                    return new ServiceResponse<ShoppingListDto>(default, false, 404, Messages.CategoryNotFound);
+                }
+                entityToAdd.Category = categoryToAdd;
+                var result = await _shoppingListWriteRepository.AddAsync(entityToAdd);
+                return new ServiceResponse<ShoppingListDto>(_mapper.Map<ShoppingListDto>(result), true, 204, Messages.ShoppingListCreated);
+                throw new NotImplementedException();
             }
-            entityToAdd.Category = categoryToAdd;
-            var result = await _shoppingListWriteRepository.AddAsync(entityToAdd);
-            return new ServiceResponse<ShoppingListDto>(_mapper.Map<ShoppingListDto>(result), true, 204, Messages.ShoppingListCreated);
-            throw new NotImplementedException();
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+            
         }
     }
 }

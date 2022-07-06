@@ -20,13 +20,22 @@ namespace Application.Features.Categories.Handlers.Commands
 
         public async Task<BaseResponse> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            var entityToDelete = await _categoryReadRepository.GetById(request.Id);
-            if (entityToDelete==null)
+            try
             {
-                return new BaseResponse(false,404,Messages.CategoryNotFound);
+                var entityToDelete = await _categoryReadRepository.GetById(request.Id);
+                if (entityToDelete == null)
+                {
+                    return new BaseResponse(false, 404, Messages.CategoryNotFound);
+                }
+                _categoryWriteRepository.Remove(entityToDelete);
+                return new BaseResponse(true, 200, Messages.CategoryDeleted);
             }
-            _categoryWriteRepository.Remove(entityToDelete);
-            return new BaseResponse(true, 200, Messages.CategoryDeleted);
+            catch (Exception e)
+            {
+
+                throw new Exception(e.Message);
+            }
+
         }
     }
 }
