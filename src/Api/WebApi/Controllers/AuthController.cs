@@ -15,7 +15,7 @@ namespace WebApi.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterCommand request)
         {
             var result = await _mediator.Send(request);
@@ -25,6 +25,24 @@ namespace WebApi.Controllers
             }
             return Ok(result);
         }
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginCommand request)
+        {
+            var result = await _mediator.Send(request);
+            switch (result.StatusCode)
+            {
+                case 404:
+                    return NotFound(result);
+                    break;
+                case 401:
+                    return Unauthorized(result);
+                    break;
+                default:
+                    break;
+            }
+            return Ok(result);
+        }
+
         
     }
 }

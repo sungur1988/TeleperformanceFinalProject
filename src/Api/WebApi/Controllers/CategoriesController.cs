@@ -1,11 +1,13 @@
 ﻿using Application.Features.Categories.Requests.Commands;
 using Application.Features.Categories.Requests.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers
 {
+    
     [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
@@ -51,6 +53,7 @@ namespace WebApi.Controllers
                 return NotFound(result);
             return Ok(result);
         }
+        [Authorize(Roles ="Admin")]
         [HttpGet]
         public async Task<IActionResult> GetAllCategory(int pageNumber,int pageSize)
         {

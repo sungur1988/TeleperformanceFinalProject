@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 namespace Identity
 {
     public static class IdentityServiceRegistration
@@ -22,7 +22,10 @@ namespace Identity
                 options.UseSqlServer(configuration.GetConnectionString("IdentityConnectionString"));
             });
 
-            services.AddIdentity<AppUser,IdentityRole>()
+            services.AddIdentity<AppUser, IdentityRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            })
                 .AddEntityFrameworkStores<AppIdentityDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -32,11 +35,12 @@ namespace Identity
 
             services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-                 .AddJwtBearer(o =>
+                .AddJwtBearer(o =>
                  {
+                     var tokenOptions = configuration.GetSection("CustomJwtSettings").Get<CustomJwtSettings>();
                      o.TokenValidationParameters = new TokenValidationParameters
                      {
                          ValidateIssuerSigningKey = true,
@@ -44,9 +48,9 @@ namespace Identity
                          ValidateAudience = true,
                          ValidateLifetime = true,
                          ClockSkew = TimeSpan.Zero,
-                         ValidIssuer = configuration["CustomJwtSettings:Issuer"],
-                         ValidAudience = configuration["CustomJwtSettings:Audience"],
-                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["CustomJwtSettings:Key"]))
+                         ValidIssuer = tokenOptions.Issuer,//configuration["CustomJwtSettings:Issuer"],
+                         ValidAudience = tokenOptions.Audience,//configuration["CustomJwtSettings:Audience"],
+                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenOptions.Key))
                      };
                  });
             return services;

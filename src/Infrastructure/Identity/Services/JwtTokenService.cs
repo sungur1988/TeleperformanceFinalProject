@@ -32,20 +32,20 @@ namespace Identity.Services
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, appUser.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, appUser.Id),
-                new Claim(JwtRegisteredClaimNames.Email, appUser.Email)
-            }
-            .Union(roleClaims)
-            .Union(userClaims);
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, appUser.Email),
+                new Claim(ClaimTypes.NameIdentifier,appUser.Id)
+            }.Union(roleClaims).Union(userClaims);
+
 
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
-            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+            var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256Signature);
 
             var jwtSecurityToken = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationInMinutes),
+                expires: DateTime.Now.AddMinutes((double)_jwtSettings.DurationInMinutes),
                 signingCredentials: signingCredentials);
 
             var token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);

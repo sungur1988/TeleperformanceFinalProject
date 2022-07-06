@@ -1,4 +1,5 @@
-﻿using Application.Contracts.Identities;
+﻿using Application.Constants;
+using Application.Contracts.Identities;
 using Application.Dtos;
 using Application.Models;
 using Application.Wrapper;
@@ -39,6 +40,21 @@ namespace Identity.Services
             response.Token = await _tokenService.CreateTokenAsync(userResult.Value);
 
             return new ServiceResponse<RegisterResponseDto>(response, true, userResult.StatusCode);
+        }
+
+        public async Task<ServiceResponse<string>> Login(LoginRequestDto loginRequestDto)
+        {
+            var user = await _userService.GetUser(loginRequestDto.Email);
+            if (!user.IsSuccess)
+            {
+                return new ServiceResponse<string>(default, user.IsSuccess, user.StatusCode,user.Message);
+            }
+            var signInResult = await _userService.Login(user.Value, loginRequestDto.Password);
+            if (!signInResult)
+                return new ServiceResponse<string>(default, false, 401, Messages.LoginFailed);
+            
+            var token = await _tokenService.CreateTokenAsync(user.Value);
+            return new ServiceResponse<string>(token, true, 200,Messages.LoginSuccess);
         }
     }
 }
