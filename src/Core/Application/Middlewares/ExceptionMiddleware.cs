@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 using System.Net;
 
 namespace Application.Middlewares
@@ -30,6 +31,11 @@ namespace Application.Middlewares
             {
                 message = e.Message;
             }
+            Log.Logger = new LoggerConfiguration()
+                  .WriteTo.File("Logs", Serilog.Events.LogEventLevel.Error)
+                 .CreateLogger();
+
+            Log.Error(message);
 
             return httpContext.Response.WriteAsync(new 
             {

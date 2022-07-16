@@ -5,8 +5,11 @@ using Application.Middlewares;
 using Cache;
 using Identity;
 using Persistence;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog();
 
 // Add services to the container.
 var configuration = builder.Configuration;
